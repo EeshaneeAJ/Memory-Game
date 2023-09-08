@@ -1,0 +1,339 @@
+import time
+import pygame
+from tkinter import *
+# activate the pygame library . 
+x = []
+rules= Tk()
+rules.title("RULES FOR MEMORY GAME")
+data ={"RULE1":"1.Find two  matching cards and remove all cards.","RULE 2":"2.If  the two cards reveal at the same time  and both are matching both the cards will be removed.","RULE 3":"3.If the two cards turned over do no match then the cards are turned to face down.","RULE 4 ":"4.Do not double-click the card as it will increases the numbers of clicks and waste your time.", "RULE 5" :"5.Do it as fast as possible and do not waste your time.","RULE 6":"6.Pay utmost attention.","RULE 7":"7.ALL THE BEST!!!"}
+for y in data.values():
+    x.append(y)
+for i in range(len(x)):
+    rul=str(i)
+    rul=Label(rules,text=x[i])
+    rul.grid(row=i+1,column=0,sticky=N)
+Label(rules,text="RULES").grid(row=0,ipadx = 10,ipady = 10)
+Button(rules,text="GOT IT",bg="darkgrey",width=6,command=rules.destroy).grid(row=i+2,column=0,sticky=S)
+rules.mainloop()
+pygame.init()
+# Set some colors
+white = (255, 255, 255)
+green = (0,255,0)
+blue = (0,0,255)
+red = (255,0,0)
+black = (0,0,0)
+bg=(0,0,0)
+# For randomly initiating the Card Deck
+o=(1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8)
+one=list(o)
+mouse_clicks = 0
+pairs = 0
+total_clicks=0
+final_time=0
+import random
+class Card:
+    def __init__(me, Num, Pic, Found, Flip):
+        me.Num = 0
+        me.Pic = pygame.image.load('C:/Users/hp/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Python 3.11/ES01.png')
+        me.Found = False
+        me.Flip = False
+Deck = []
+for i in range (16):
+    Deck.append(Card(i,'C:/Users/hp/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Python 3.11/ES01.png',False,False)) # Just for Initialization
+    Deck[i].Num = i 
+    Deck[i].Pic = "image" + str(i) 
+    Deck[i].Found = False
+    Deck[i].Flip = False
+for j in range(16):
+    a = random.choice(one)
+    Deck[j].Pic= pygame.image.load('C:/Users/hp/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Python 3.11/image' + str(a) + '.png')
+    Deck[j].Num = a
+    one.remove(a)
+# Setting Display Surface Size (X = Width, Y = Height) 
+X = 400
+Y = 450
+
+# Create the display surface object of dimension (X, Y). 
+display_surface = pygame.display.set_mode((X, Y )) 
+  
+# Set the pygame window name 
+pygame.display.set_caption("Memory Game ") 
+  
+# Load the images 
+card_back = pygame.image.load('C:/Users/hp/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Python 3.11/ES01.png')
+ 
+# infinite loop 
+while True :   
+    # completely fill the surface object 
+    display_surface.fill(bg) 
+    # iterate over the list of Event objects that was returned by pygame.event.get() method. 
+    for event in pygame.event.get() : 
+        # if event object type is QUIT ('X' on the Window) then quitting the pygame and program both. 
+        if event.type == pygame.QUIT :   
+            # deactivates the pygame library 
+            pygame.quit()   
+            # quit the program. 
+            quit()
+        # Draw grid lines
+        for i in range(0,4): 
+            v1 = 100 + i*100,0
+            v2 = 100 + i*100,400
+            pygame.draw.line(display_surface, red, v1,v2)#Vertical Lines
+            h1 = 0, 100 + i*100
+            h2 = 400, 100 + i*100
+            pygame.draw.line(display_surface, red, h1,h2)#Horizontal Lines
+            for n in range (16): #Start Drawing the Essess
+                if n == 0:
+                    if Deck[n].Found == False:
+                        if Deck[n].Flip == False:
+                            display_surface.blit(card_back, (5, 5)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (5, 5))
+                if n == 1:
+                    if Deck[n].Found == False:
+                        if Deck[n].Flip == False:
+                            display_surface.blit(card_back, (105, 5)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (105, 5))
+                if n == 2:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (205, 5)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (205, 5))
+                if n == 3:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (305, 5)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (305, 5))
+                if n == 4:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (5, 105)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (5, 105))
+                if n == 5:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (105, 105)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (105, 105))
+                if n == 6:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (205, 105)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (205, 105))
+                if n == 7:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (305, 105)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (305, 105))
+                if n == 8:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (5, 205)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (5, 205))
+                if n == 9:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (105, 205)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (105, 205))
+                if n == 10:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (205, 205)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (205, 205))
+                if n == 11:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (305, 205)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (305, 205))
+                if n == 12:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (5, 305)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (5, 305))
+                if n == 13:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (105, 305)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (105, 305))
+                if n == 14:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (205, 305)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (205, 305))
+                if n == 15:
+                    if not Deck[n].Found:
+                        if not Deck[n].Flip:
+                            display_surface.blit(card_back, (305, 305)) 
+                        else:
+                            display_surface.blit(Deck[n].Pic, (305, 305))
+        if event.type == pygame.MOUSEBUTTONUP :
+            x,y = pygame.mouse.get_pos()
+            #print(x,y)
+            mouse_clicks = mouse_clicks + 1
+            #first eight
+            if x >0 and x <100 and y > 0 and y <100 :
+                if Deck[0].Found == False:
+                     display_surface.blit(Deck[0].Pic, (5, 5))
+                     Deck[0].Flip = True
+            if x >100 and x <200 and y > 0 and y <100 :
+                if Deck[1].Found == False:
+                    display_surface.blit(Deck[1].Pic, (105, 5))
+                    Deck[1].Flip = True
+            if x >200 and x <300 and y > 0 and y <100 :
+                if Deck[2].Found == False:
+                    display_surface.blit(Deck[2].Pic, (205, 5))
+                    Deck[2].Flip = True
+            if x >300 and x <400 and y > 0 and y <100 :
+                if Deck[3].Found == False:
+                    display_surface.blit(Deck[3].Pic, (305, 5))
+                    Deck[3].Flip = True
+            if x >0 and x <100 and y > 100 and y <200 :
+                if Deck[4].Found == False:
+                    display_surface.blit(Deck[4].Pic, (5, 105))
+                    Deck[4].Flip = True
+            if x >100 and x <200 and y > 100 and y <200 :
+                if Deck[5].Found == False:
+                    display_surface.blit(Deck[5].Pic, (105, 105))
+                    Deck[5].Flip = True
+            if x >200 and x <300 and y > 100 and y <200 :
+                if Deck[6].Found == False:
+                    display_surface.blit(Deck[6].Pic, (205, 105))
+                    Deck[6].Flip = True
+            if x >300 and x <400 and y > 100 and y <200 :
+                if Deck[7].Found == False:
+                    display_surface.blit(Deck[7].Pic, (305, 105))
+                    Deck[7].Flip = True
+            #second eight
+            if x >0 and x <100 and y > 200 and y <300 :
+                if Deck[8].Found == False:
+                    display_surface.blit(Deck[8].Pic, (5, 205))
+                    Deck[8].Flip = True
+            if x >100 and x <200 and y > 200 and y <300 :
+                if Deck[9].Found == False:
+                    display_surface.blit(Deck[9].Pic, (105, 205))
+                    Deck[9].Flip = True
+            if x >200 and x <300 and y > 200 and y <300 :
+                if Deck[10].Found == False:
+                    display_surface.blit(Deck[10].Pic, (205, 205))
+                    Deck[10].Flip = True
+            if x >300 and x <400 and y > 200 and y <300 :
+                if Deck[11].Found == False:
+                    display_surface.blit(Deck[11].Pic, (305, 205))
+                    Deck[11].Flip = True
+            if x >0 and x <100 and y > 300 and y <400 :
+                if Deck[12].Found == False:
+                    display_surface.blit(Deck[12].Pic, (5, 305))
+                    Deck[12].Flip = True
+            if x >100 and x <200 and y > 300 and y <400 :
+                if Deck[13].Found == False:
+                    display_surface.blit(Deck[13].Pic, (105, 305))
+                    Deck[13].Flip = True
+            if x >200 and x <300 and y > 300 and y <400 :
+                if Deck[14].Found == False:
+                    display_surface.blit(Deck[14].Pic, (205, 305))
+                    Deck[14].Flip = True
+            if x >300 and x <400 and y > 300 and y <400 :
+                if Deck[15].Found == False:
+                    display_surface.blit(Deck[15].Pic, (305, 305))
+                    Deck[15].Flip = True
+            
+            # Now the list Deck has data on if a pair has been found and if they are flipped for every second click evaluate if the images match
+            if mouse_clicks % 2 == 0:
+                first = False
+                second = False
+                card1 = 0
+                card2 = 0
+                for a in range (16):
+                    if not Deck[a].Found:
+                        if Deck[a].Flip == True and first == False:
+                            first = True
+                            card1 = a
+                            Deck[a].Flip = False
+                        if second == False and Deck[a].Flip == True:
+                            second = True
+                            card2 = a
+                            Deck[a].Flip = False
+                if first == True and second == True :
+                    if Deck[card1].Num == Deck[card2].Num:
+                        Deck[card1].Found = True
+                        Deck[card2].Found = True
+                        pairs+=1
+                        if pairs == 8:
+                            total_clicks=mouse_clicks
+                            final_time=tme
+                            #print("total time:",final_time)
+                            #print("total clicks:",total_clicks)
+                            
+                            def sec(tup):
+                                return tup[1]
+                        
+                            
+                            def show():
+                                global total_clicks
+                                global final_time
+                                et=e.get()
+                                MyFile = open('note.txt','r+')
+                                tc=str(total_clicks)
+                                ft=str(final_time)
+                                Records = MyFile.readlines()
+                                
+                                d=str(et)+':'+str(ft)  
+                                dodo=str(et)+':'+str(ft)+"\n"
+                                
+                                Records.append(d)
+                                times=[]
+                                print("Memory Game")
+                                for i in Records:
+                                    mama = i.find(":")
+                                    if mama != -1:
+                                       name,time = i.split(":")
+                                       time=int(time)
+                                       times.append((name,time))
+                                       
+                                    
+                                    
+                                times.sort(key= sec)
+                                wind = Tk()
+                                wind.title("Highscore")
+                                window.geometry("480x320")
+                                for i in times:
+                                    j=str(i[0])+": "+ str(i[1])
+                                    L = Label(wind, text=j,height=1, width=30, bg= "yellow")
+                                    L.pack()
+                                    
+                                MyFile.write(dodo)
+                                MyFile.close()
+                                window.destroy()
+                            window= Tk()
+                            window.title("RECORD")
+                            window.configure(background="grey")
+                            er=Label(window,text="Enter your Name:",bg="darkgrey")
+                            er.grid(row=0,column=0,sticky=W)
+                            e=Entry(window,width=50)
+                            e.grid(row=0,column=10,sticky=W)
+                            Button(window,text="SUBMIT",bg="darkgrey",width=6,command=show).grid(row=1,column=0,sticky=W)
+                            window.mainloop()
+        font = pygame.font.SysFont("Arial", 18)
+        tme=int(pygame.time.get_ticks()/1000)
+        #print("time taken:", tme)
+        myStrings = "Time taken:"  + str(tme)
+        text = font.render(myStrings, True, red)
+        display_surface.blit(text, (0,420))
+        myString = "Number of clicks: " + str(mouse_clicks)
+        text = font.render(myString, True, red)
+        display_surface.blit(text, (0,405))
+        # Draws the surface object to the screen.
+        pygame.display.update()
